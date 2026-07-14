@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">手机时间管家</string>
+
+    <!-- 通知 -->
+    <string name="channel_time_limit">使用时长提醒</string>
+    <string name="notification_timer_title">剩余使用时间</string>
+    <string name="notification_timer_body">你还有 %d 分钟可以使用手机</string>
+    <string name="notification_locked_title">手机已锁定</string>
+    <string name="notification_locked_body">使用时间已用完，请联系家长解锁</string>
+
+    <!-- 通用 -->
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">确认</string>
+    <string name="back">返回</string>
+
+    <!-- 儿童界面 -->
+    <string name="child_title">今天还能玩</string>
+    <string name="child_minutes">分钟</string>
+    <string name="child_seconds">秒</string>
+    <string name="child_time_up">时间到了</string>
+    <string name="child_time_up_desc">今天的手机使用时间已用完，放下手机去玩吧！</string>
+    <string name="child_no_limit">未设置时间限制</string>
+    <string name="child_no_limit_desc">请让家长先设置每日使用时长</string>
+    <string name="child_warning_5min">还剩5分钟</string>
+    <string name="child_warning_1min">还剩1分钟</string>
+    <string name="child_warning_expired">时间到！</string>
+
+    <!-- 家长界面 -->
+    <string name="parent_title">家长设置</string>
+    <string name="parent_set_pin">设置解锁密码</string>
+    <string name="parent_confirm_pin">确认密码</string>
+    <string name="parent_pin_mismatch">两次密码不一致</string>
+    <string name="parent_pin_set">密码设置成功</string>
+    <string name="parent_enter_pin">请输入家长密码</string>
+    <string name="parent_wrong_pin">密码错误</string>
+    <string name="parent_time_limit">每日使用时长</string>
+    <string name="parent_add_time">额外增加时间</string>
+    <string name="parent_add_15min">增加15分钟</string>
+    <string name="parent_add_30min">增加30分钟</string>
+    <string name="parent_add_60min">增加60分钟</string>
+    <string name="parent_button">家长设置</string>
+    <string name="parent_unlock">解锁</string>
+    <string name="parent_unlock_phone">解锁手机</string>
+    <string name="parent_settings">家长设置</string>
+
+    <!-- 锁屏 -->
+    <string name="lock_title">手机已锁定</string>
+    <string name="lock_desc">使用时间已用完\n请找家长解锁</string>
+    <string name="lock_unlock">解锁</string>
+
+    <!-- 设备管理员 -->
+    <string name="device_admin_description">手机时间管家需要设备管理员权限来锁定屏幕和管理使用时间。</string>
+
+    <!-- 时长选项 -->
+    <string name="duration_30min">30分钟</string>
+    <string name="duration_1h">1小时</string>
+    <string name="duration_1_5h">1.5小时</string>
+    <string name="duration_2h">2小时</string>
+    <string name="duration_3h">3小时</string>
+    <string name="duration_custom">自定义</string>
+</resources>

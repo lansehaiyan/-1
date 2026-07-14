@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.PhoneTimeManager" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">#FF1A237E</item>
+        <item name="android:navigationBarColor">#FF1A237E</item>
+    </style>
+
+    <style name="Theme.PhoneTimeManager.Lock" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">#FF000000</item>
+        <item name="android:navigationBarColor">#FF000000</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+</resources>
