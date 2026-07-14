@@ -20,6 +20,15 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
+      - name: Debug - check SDK
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
+          cat local.properties
+          ls -la $ANDROID_HOME/platforms/ 2>/dev/null || echo "No platforms"
+          ls -la $ANDROID_HOME/build-tools/ 2>/dev/null || echo "No build-tools"
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
@@ -27,9 +36,17 @@ jobs:
           cache-read-only: false
 
       - name: Build Debug APK
-        run: gradle assembleDebug --no-daemon
+        run: gradle assembleDebug --no-daemon --stacktrace 2>&1 | tee build.log | tail -100
+
+      - name: Upload build log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: build.log
 
       - name: Upload APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: PhoneTimeManager-APK
