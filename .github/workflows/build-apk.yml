@@ -29,18 +29,22 @@ jobs:
           gradle-version: 8.5
 
       - name: Build Debug APK
+        id: build
         run: |
           set -o pipefail
-          gradle assembleDebug --no-daemon --scan 2>&1 | tee /tmp/gradle.log
+          gradle assembleDebug --no-daemon --stacktrace 2>&1 | tee /tmp/gradle.log
+          echo "exitcode=$?" >> $GITHUB_OUTPUT
 
-      - name: Print errors
-        if: failure()
+      - name: Show errors in summary
+        if: always()
         run: |
-          echo "=== GRADLE BUILD FAILED ==="
-          echo "=== Last 100 lines ==="
-          tail -100 /tmp/gradle.log
-          echo "=== Errors found ==="
-          grep -i -E "error|FAILED|Exception|Cause|not found" /tmp/gradle.log | head -30 || echo "(none found)"
+          echo "## Build Log" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          tail -200 /tmp/gradle.log >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Gradle Error Summary" >> $GITHUB_STEP_SUMMARY
+          grep -i -E "error|FAILED|Exception|Cause|Cannot|not found" /tmp/gradle.log | head -20 >> $GITHUB_STEP_SUMMARY
 
       - name: Upload APK
         if: success()
