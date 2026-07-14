@@ -27,9 +27,30 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build Debug APK
-        run: ./gradlew assembleDebug --no-daemon --stacktrace
+        id: build
+        run: |
+          set -o pipefail
+          ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee /tmp/gradle.log
+          echo "exit_code=$?" >> $GITHUB_OUTPUT
+
+      - name: Upload log to pastebin
+        if: failure()
+        run: |
+          echo "=== Gradle Build Error Log ==="
+          echo "Exit code: $(cat /tmp/gradle.log 2>/dev/null | tail -1)"
+          echo ""
+          echo "=== Last 100 lines ==="
+          tail -100 /tmp/gradle.log 2>/dev/null
+          echo ""
+          echo "=== Error grep ==="
+          grep -i -E "error|FAILED|Exception|Cause|Cannot|not.found|Missing" /tmp/gradle.log 2>/dev/null | head -30 || echo "(no error patterns)"
+          # Try to post to dpaste
+          echo ""
+          echo "=== Uploading to dpaste ==="
+          tail -500 /tmp/gradle.log 2>/dev/null | curl -s -X POST -d "content=@-" -d "format=url" -d "expiry_days=7" "https://dpaste.org/api/" || echo "dpaste upload failed"
 
       - name: Upload APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: PhoneTimeManager-APK
