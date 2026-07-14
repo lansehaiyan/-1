@@ -23,27 +23,22 @@ jobs:
       - name: Create local.properties
         run: echo "sdk.dir=$ANDROID_HOME" > local.properties
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: 8.5
+      - name: Make gradlew executable
+        run: chmod +x gradlew
 
       - name: Build Debug APK
-        id: build
         run: |
           set -o pipefail
-          gradle assembleDebug --no-daemon --stacktrace 2>&1 | tee /tmp/gradle.log
-          echo "exitcode=$?" >> $GITHUB_OUTPUT
+          ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee /tmp/gradle.log
 
-      - name: Show errors in summary
+      - name: Show build log
         if: always()
         run: |
-          echo "## Build Log" >> $GITHUB_STEP_SUMMARY
+          echo "## Build Output (last 200 lines)" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           tail -200 /tmp/gradle.log >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Gradle Error Summary" >> $GITHUB_STEP_SUMMARY
+          echo "### Errors" >> $GITHUB_STEP_SUMMARY
           grep -i -E "error|FAILED|Exception|Cause|Cannot|not found" /tmp/gradle.log | head -20 >> $GITHUB_STEP_SUMMARY
 
       - name: Upload APK
