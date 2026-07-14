@@ -29,16 +29,24 @@ jobs:
           gradle-version: 8.5
 
       - name: Build Debug APK
-        run: gradle assembleDebug --no-daemon
+        run: |
+          gradle assembleDebug --no-daemon --stacktrace > build.log 2>&1 || true
+          echo "=== Exit code: $? ==="
+          tail -200 build.log
+
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: build.log
 
       - name: Find APK
-        run: |
-          echo "=== Searching for APK ==="
-          find . -name "*.apk" -type f 2>/dev/null
-          echo "=== Build output dir ==="
-          ls -la app/build/outputs/ 2>/dev/null || echo "No outputs dir"
+        if: success()
+        run: find . -name "*.apk" -type f
 
       - name: Upload APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: PhoneTimeManager-APK
