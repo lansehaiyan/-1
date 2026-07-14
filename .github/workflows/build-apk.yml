@@ -29,9 +29,21 @@ jobs:
           gradle-version: 8.5
 
       - name: Build Debug APK
-        run: gradle assembleDebug --no-daemon --stacktrace
+        run: |
+          set -o pipefail
+          gradle assembleDebug --no-daemon --scan 2>&1 | tee /tmp/gradle.log
+
+      - name: Print errors
+        if: failure()
+        run: |
+          echo "=== GRADLE BUILD FAILED ==="
+          echo "=== Last 100 lines ==="
+          tail -100 /tmp/gradle.log
+          echo "=== Errors found ==="
+          grep -i -E "error|FAILED|Exception|Cause|not found" /tmp/gradle.log | head -30 || echo "(none found)"
 
       - name: Upload APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: PhoneTimeManager-APK
