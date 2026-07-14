@@ -30,20 +30,15 @@ jobs:
 
       - name: Build Debug APK
         run: |
-          gradle assembleDebug --no-daemon --stacktrace > build.log 2>&1 || true
-          echo "=== Exit code: $? ==="
-          tail -200 build.log
-
-      - name: Upload build log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-log
-          path: build.log
-
-      - name: Find APK
-        if: success()
-        run: find . -name "*.apk" -type f
+          echo "## Build Output" >> $GITHUB_STEP_SUMMARY
+          gradle assembleDebug --no-daemon --stacktrace 2>&1 | tee /tmp/build.log | tail -200 >> $GITHUB_STEP_SUMMARY
+          exitcode=${PIPESTATUS[0]}
+          echo "Exit code: $exitcode"
+          echo "**Exit code: $exitcode**" >> $GITHUB_STEP_SUMMARY
+          if [ $exitcode -ne 0 ]; then
+            grep -i "error\|FAILED\|Exception\|not found\|Missing\|Could not" /tmp/build.log | head -30 >> $GITHUB_STEP_SUMMARY
+            exit $exitcode
+          fi
 
       - name: Upload APK
         if: success()
